@@ -57,27 +57,27 @@ namespace suncatch_adt_event_manager
                             if(propertyPath.Equals("/CurrentWind"))
                             {
                                 float currentWind = operation["value"].Value<float>();
-                                AsyncPageable<IncomingRelationship> windAlertRelashion = client.GetIncomingRelationshipsAsync(twinId);
-                                await foreach(IncomingRelationship windAlert in windAlertRelashion)
+                                AsyncPageable<IncomingRelationship> windAlertRelationships = client.GetIncomingRelationshipsAsync(twinId);
+                                await foreach(IncomingRelationship rel in windAlertRelationships)
                                 {
-                                    if(windAlert.RelationshipName == "windAlert")
+                                    if(rel.RelationshipName == "windAlert")
                                     {
                                         try
                                         {
                                             if(currentWind > 20)
                                             {
-                                                await AdtUtilities.UpdateTwinPropertyAsync(client, windAlert.SourceId, "/Mode", "Safety", log);
-                                                log.LogInformation($"Wind alert triggered on {windAlert.SourceId}, mode changed to Safety");
+                                                await AdtUtilities.UpdateTwinPropertyAsync(client, rel.SourceId, "/Mode", "Safety", log);
+                                                log.LogInformation($"Wind alert triggered on {rel.SourceId}, mode changed to Safety");
                                             }
                                             else
                                             {
-                                                await AdtUtilities.UpdateTwinPropertyAsync(client, windAlert.SourceId, "/Mode", "Auto", log);
-                                                log.LogInformation($"Wind alert triggered on {windAlert.SourceId}, mode changed to Safety");
+                                                await AdtUtilities.UpdateTwinPropertyAsync(client, rel.SourceId, "/Mode", "Auto", log);
+                                                log.LogInformation($"Wind alert triggered on {rel.SourceId}, mode changed to Auto");
                                             }
                                         }
                                         catch(Exception e)
                                         {
-                                            log.LogError($"failed to update {windAlert.SourceId}. Error:{e}");
+                                            log.LogError($"failed to update {rel.SourceId}. Error:{e}");
                                             return;
                                         }
                                     }
