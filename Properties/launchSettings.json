@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "suncatch-adt-event-manager": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "ADT_SERVICE_URL": "https://suncatch-dtw.api.wcus.digitaltwins.azure.net"
+      }
+    }
+  }
+}
